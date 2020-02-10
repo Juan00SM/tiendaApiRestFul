@@ -6,12 +6,17 @@
 package com.service.apirestfulshop.model;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -39,7 +44,7 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 24)
@@ -54,26 +59,31 @@ public class Product implements Serializable {
     @NotNull
     @Column(name = "price")
     private float price;
+    
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "id_product", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_order", referencedColumnName = "id"))
+    private Set<Orders> orders;
+
 
     public Product() {
     }
 
-    public Product(Integer id) {
+    public Product(Long id) {
         this.id = id;
     }
 
-    public Product(Integer id, String name, String description, float price) {
+    public Product(Long id, String name, String description, float price) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

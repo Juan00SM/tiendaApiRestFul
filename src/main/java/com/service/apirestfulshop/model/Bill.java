@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,7 +44,7 @@ public class Bill implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "datePurchase")
@@ -57,29 +58,29 @@ public class Bill implements Serializable {
     @NotNull
     @Column(name = "totalPrice")
     private int totalPrice;
-    @JoinColumn(name = "id_order", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Orders idOrder;
+    
+    @OneToOne(mappedBy = "bill")
+    private Orders order;
 
     public Bill() {
     }
 
-    public Bill(Integer id) {
+    public Bill(Long id) {
         this.id = id;
     }
 
-    public Bill(Integer id, Date datePurchase, int numProduct, int totalPrice) {
+    public Bill(Long id, Date datePurchase, int numProduct, int totalPrice) {
         this.id = id;
         this.datePurchase = datePurchase;
         this.numProduct = numProduct;
         this.totalPrice = totalPrice;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -108,11 +109,11 @@ public class Bill implements Serializable {
     }
 
     public Orders getIdOrder() {
-        return idOrder;
+        return order;
     }
 
-    public void setIdOrder(Orders idOrder) {
-        this.idOrder = idOrder;
+    public void setIdOrder(Orders order) {
+        this.order = order;
     }
 
     @Override
