@@ -43,7 +43,7 @@ public class Bill implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "datePurchase")
@@ -64,22 +64,22 @@ public class Bill implements Serializable {
     public Bill() {
     }
 
-    public Bill(Integer id) {
+    public Bill(Long id) {
         this.id = id;
     }
 
-    public Bill(Integer id, Date datePurchase, int numProduct, int totalPrice) {
+    public Bill(Long id, Date datePurchase, int numProduct, int totalPrice) {
         this.id = id;
         this.datePurchase = datePurchase;
         this.numProduct = numProduct;
         this.totalPrice = totalPrice;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -43,7 +43,7 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 24)
@@ -65,22 +65,22 @@ public class Client implements Serializable {
     public Client() {
     }
 
-    public Client(Integer id) {
+    public Client(Long id) {
         this.id = id;
     }
 
-    public Client(Integer id, String name, int age, String phone) {
+    public Client(Long id, String name, int age, String phone) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.phone = phone;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
