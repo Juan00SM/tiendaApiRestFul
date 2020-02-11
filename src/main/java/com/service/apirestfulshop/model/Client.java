@@ -59,8 +59,8 @@ public class Client implements Serializable {
     @Size(min = 1, max = 12)
     @Column(name = "phone")
     private String phone;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
-    private Set<Orders> ordersSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
+    private Set<Orders> orders;
 
     public Client() {
     }
@@ -110,11 +110,11 @@ public class Client implements Serializable {
 
     @XmlTransient
     public Set<Orders> getOrdersSet() {
-        return ordersSet;
+        return orders;
     }
 
     public void setOrdersSet(Set<Orders> ordersSet) {
-        this.ordersSet = ordersSet;
+        this.orders = ordersSet;
     }
 
     @Override

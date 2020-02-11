@@ -58,7 +58,7 @@ public class OrdersService {
             if (orders.isPresent()) {
                 Orders newEntity = orders.get();
                 //newEntity.setId(entity.getId());
-                newEntity.setIdClient(entity.getIdClient());
+                newEntity.setClient(entity.getClient());
                 newEntity.setStatus(entity.getStatus());
                 newEntity.setDateCreated(entity.getDateCreated());
 

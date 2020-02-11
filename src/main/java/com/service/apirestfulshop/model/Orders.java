@@ -16,10 +16,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,13 +61,17 @@ public class Orders implements Serializable {
     @Column(name = "status")
     private String status;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrder")
-    private Set<Bill> billSet;
+    @OneToOne
+    @JoinColumn(name = "id_bill", referencedColumnName = "id")
+    private Bill bill;
     
     
     @ManyToOne
-    @JoinColumn(name = "id_client")
-    private Client idClient;
+    @JoinColumn(name = "id_client", referencedColumnName = "id")
+    private Client client;
+    
+    @ManyToMany(cascade = CascadeType.DETACH, mappedBy = "orders")
+    private Set<Product> products;
 
     public Orders() {
     }
@@ -105,21 +111,30 @@ public class Orders implements Serializable {
     }
 
     @XmlTransient
-    public Set<Bill> getBillSet() {
-        return billSet;
+    public Bill getBill() {
+        return bill;
     }
 
-    public void setBillSet(Set<Bill> billSet) {
-        this.billSet = billSet;
+    public void setBill(Bill bill) {
+        this.bill = bill;
     }
 
-    public Client getIdClient() {
-        return idClient;
+    public Client getClient() {
+        return client;
     }
 
-    public void setIdClient(Client idClient) {
-        this.idClient = idClient;
+    public void setClient(Client client) {
+        this.client = client;
     }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+    
 
     @Override
     public int hashCode() {
