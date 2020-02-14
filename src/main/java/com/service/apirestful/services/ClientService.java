@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * @author juans
+ * @author alfon
  */
 @Service
 public class ClientService {
@@ -83,8 +83,8 @@ public class ClientService {
         }
     }
 
-    public List<Client> getClientByName(String name) {
-        List<Client> clientList = repository.getByName(name);
+    public List<Client> getClientByCriteria(String name, String age, String phone) {
+        List<Client> clientList = repository.getByCriteria(name,age,phone);
 
         if (clientList.size() > 0) {
             return clientList;
