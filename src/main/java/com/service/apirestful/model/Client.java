@@ -19,7 +19,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author juans
+ * @author alfon
  */
 @Entity
 @Table(name = "client")

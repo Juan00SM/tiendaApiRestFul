@@ -10,6 +10,7 @@ import com.service.apirestful.model.Client;
 import com.service.apirestful.services.ClientService;
 import java.util.List;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author juans
+ * @author alfon
  */
 @RestController
 @RequestMapping("/client")
@@ -49,9 +51,10 @@ public class ClientServiceController {
         return new ResponseEntity<Client>(entity, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<List<Client>> getClientByName(@PathVariable("name") String name) {
-        List<Client> list = service.getClientByName(name);
+    @GetMapping("/search")
+    public ResponseEntity<List<Client>> getClientByCriteria(@RequestParam(required = false,name="name") String name,@RequestParam(required = false,name="age") String age,@RequestParam(required = false,name="phone") String phone) {
+       
+        List<Client> list = service.getClientByCriteria(name==null?"":name,age==null?"":age,phone==null?"":phone);
 
         return new ResponseEntity<List<Client>>(list, new HttpHeaders(), HttpStatus.OK);
     }

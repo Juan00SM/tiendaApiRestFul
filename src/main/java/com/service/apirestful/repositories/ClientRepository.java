@@ -17,8 +17,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface ClientRepository extends JpaRepository<Client, Long>{
     
     @Query(
-    value="SELECT * FROM client AS c WHERE c.name LIKE %?1%",
-            nativeQuery=true)
-    public List<Client> getByName(String name);
+    value="SELECT * FROM client AS c where c.name like %?1% and c.age like %?2% and c.phone like %?3%",nativeQuery=true)
+    public List<Client> getByCriteria(String name, String age, String phone);
     
 }
