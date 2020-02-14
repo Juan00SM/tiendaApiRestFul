@@ -37,11 +37,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     public List<Product> getPriceBetween(String maximum, String minimun);
     
     @Query(
-    value="SELECT * FROM product AS p WHERE p.description LIKE %?1%",
-            nativeQuery=true)
-    public List<Product> getByDescription(String description);
-    
-    @Query(
     value="SELECT * FROM product AS p WHERE p.name LIKE %?1% AND p.price < %?2% AND p.price > %?3%",
             nativeQuery=true)
     public List<Product> getByNamePrices(String description,String maximum, String minimun);
@@ -54,5 +49,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(
     value="SELECT * FROM product AS p WHERE p.name LIKE %?1% AND p.price > %?2%",
             nativeQuery=true)
-    public List<Product> getByNameMinPrice(String description,String maximum);
+    public List<Product> getByNameMinPrice(String description,String minimun);
 }

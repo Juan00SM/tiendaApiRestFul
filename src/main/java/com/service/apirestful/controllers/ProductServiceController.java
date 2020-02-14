@@ -6,8 +6,10 @@
 package com.service.apirestful.controllers;
 
 import com.service.apirestful.exceptions.RecordNotFoundException;
+import com.service.apirestful.model.Client;
 import com.service.apirestful.model.Product;
 import com.service.apirestful.services.ProductService;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -49,9 +52,39 @@ public class ProductServiceController {
         return new ResponseEntity<Product>(entity, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<List<Product>> getProductByName(@PathVariable("name") String name) {
-        List<Product> list = service.getProductByName(name);
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> getProductByCriteria(@RequestParam(required = false,name="name") String name,@RequestParam(required = false,name="max") String max,@RequestParam(required = false,name="min") String min) {
+        List<Product> list=null;
+        if(name==null&&max==null&&min==null){
+            list=new ArrayList<>();
+        }else{
+            if(max==null){
+                if(name==null){
+                    list=service.getByMorePrice(min);
+                }else{
+                    if(min==null){
+                        list=service.getByName(name);
+                    }
+                    else{
+                        list=service.getByNameMinPrice(name, min);
+                    }
+                }
+            }else{
+                if(name==null){
+                    if(min==null){
+                        list=service.getByLessPrices(max);
+                    }else{
+                        list=service.getBetweenPrices(max, min);
+                    }
+                }else{
+                    if(min==null){
+                        list=service.getByNameMaxPrice(name,max);
+                    }else{
+                        list=service.getByNamePrices(name, max, min);
+                    }
+                }
+            }
+        }
 
         return new ResponseEntity<List<Product>>(list, new HttpHeaders(), HttpStatus.OK);
     }
