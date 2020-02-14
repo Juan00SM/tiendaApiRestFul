@@ -93,5 +93,34 @@ public class BillService {
             return new ArrayList<Bill>();
         }
     }
+       public List<Bill> getByLessTotalPrices(String max){
+        List<Bill> billList = repository.getLessTotalPrice(max);
+     
+        if (billList.size() > 0) {
+            return billList;
+        } else {
+            return new ArrayList<Bill>();
+        }
+    }
+    
+    public List<Bill> getByMoreTotalPrice(String min){
+        List<Bill> billList = repository.getMoreTotalPrice(min);
+     
+        if (billList.size() > 0) {
+            return billList;
+        } else {
+            return new ArrayList<Bill>();
+        }
+    }
+    
+    public List<Bill> getBetweenTotalPrices(String max,String min){
+        List<Bill> billList = repository.getPriceTotalBetween(max,min);
+     
+        if (billList.size() > 0) {
+            return billList;
+        } else {
+            return new ArrayList<Bill>();
+        }
+    }
     
 }
