@@ -21,4 +21,19 @@ public interface BillRepository extends JpaRepository<Bill, Long>{
             nativeQuery = true)
     public List<Bill> getByCode(String code);
     
+     @Query(
+    value="SELECT * FROM bill AS b WHERE b.totalPrice < %?1%",
+            nativeQuery=true)
+    public List<Bill> getLessTotalPrice(String price);
+    
+    @Query(
+    value="SELECT * FROM bill AS b WHERE b.totalPrice > %?1%",
+            nativeQuery=true)
+    public List<Bill> getMoreTotalPrice(String price);
+    
+    @Query(
+    value="SELECT * FROM bill AS b WHERE b.totalPrice < %?1% AND b.totalPrice > %?2%",
+            nativeQuery=true)
+    public List<Bill> getPriceTotalBetween(String maximum, String minimun);
+    
 }
