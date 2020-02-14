@@ -93,4 +93,23 @@ public class ProductService {
         }
     }
     
+    public List<Product> getProductBetweenPrices(String max, String min){
+        List<Product> ProductList = repository.getPriceBetween(max, min);
+    
+        if (ProductList.size() > 0) {
+            return ProductList;
+        } else {
+            return new ArrayList<Product>();
+        }
+    }
+    
+    public List<Product> getProductMorePrices(String max){
+        List<Product> ProductList = repository.getLessPrice(max);
+    
+        if (ProductList.size() > 0) {
+            return ProductList;
+        } else {
+            return new ArrayList<Product>();
+        }
+    }
 }
