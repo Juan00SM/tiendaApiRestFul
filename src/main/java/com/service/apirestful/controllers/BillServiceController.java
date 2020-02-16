@@ -8,6 +8,7 @@ package com.service.apirestful.controllers;
 import com.service.apirestful.exceptions.RecordNotFoundException;
 import com.service.apirestful.model.Bill;
 import com.service.apirestful.services.BillService;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -75,7 +77,7 @@ public class BillServiceController {
         service.deleteBillById(id);
         return HttpStatus.ACCEPTED;
     }
-      @GetMapping("/search")
+    @GetMapping("/search")
     public ResponseEntity<List<Bill>> getProductByCriteria(@RequestParam(required = false, name = "max") String max, @RequestParam(required = false, name = "min") String min) {
         List<Bill> list = null;
         if (max == null && min == null) {
