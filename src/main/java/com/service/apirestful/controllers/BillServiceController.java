@@ -75,4 +75,22 @@ public class BillServiceController {
         service.deleteBillById(id);
         return HttpStatus.ACCEPTED;
     }
+      @GetMapping("/search")
+    public ResponseEntity<List<Bill>> getProductByCriteria(@RequestParam(required = false, name = "max") String max, @RequestParam(required = false, name = "min") String min) {
+        List<Bill> list = null;
+        if (max == null && min == null) {
+            list = new ArrayList<>();
+        } else {
+            if (max == null) {
+                list = service.getByMoreTotalPrice(min);
+            } else {
+                if (min == null) {
+                    list = service.getByLessTotalPrices(max);
+                } else {
+                    list = service.getBetweenTotalPrices(max, min);
+                }
+            }
+        }
+        return new ResponseEntity<List<Bill>>(list, new HttpHeaders(), HttpStatus.OK);
+    }
 }
