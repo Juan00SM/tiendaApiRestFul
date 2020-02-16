@@ -5,22 +5,23 @@
  */
 package com.service.apirestful.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-/**
- *
- * @author alfon
- */
+
 @Entity
 @Table(name = "client")
 public class Client implements Serializable{
@@ -41,7 +42,7 @@ public class Client implements Serializable{
     @Column(name = "phone")
     private String phone;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "client", fetch = FetchType.LAZY)
     private Set<Orders> orders;
     
     public Client() {

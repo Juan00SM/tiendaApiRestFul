@@ -10,10 +10,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-/**
- *
- * @author juans
- */
+
 public interface BillRepository extends JpaRepository<Bill, Long>{
     
     @Query(
@@ -21,7 +18,7 @@ public interface BillRepository extends JpaRepository<Bill, Long>{
             nativeQuery = true)
     public List<Bill> getByCode(String code);
     
-     @Query(
+    @Query(
     value="SELECT * FROM bill AS b WHERE b.totalPrice < %?1%",
             nativeQuery=true)
     public List<Bill> getLessTotalPrice(String price);

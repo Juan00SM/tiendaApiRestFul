@@ -6,26 +6,40 @@
 package com.service.apirestful.services;
 
 import com.service.apirestful.exceptions.RecordNotFoundException;
+import com.service.apirestful.model.Bill;
+import com.service.apirestful.model.Client;
 import com.service.apirestful.model.Orders;
+import com.service.apirestful.model.Product;
+import com.service.apirestful.repositories.BillRepository;
+import com.service.apirestful.repositories.ClientRepository;
 import com.service.apirestful.repositories.OrdersRepository;
+import com.service.apirestful.repositories.ProductRepository;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author juans
- */
+
 @Service
 public class OrdersService {
-    
+
     @Autowired
-    OrdersRepository repository;
+    OrdersRepository repositoryOrder;
+
+    @Autowired
+    ClientRepository repositoryClient;
+
+    @Autowired
+    BillRepository repositoryBill;
+
+    @Autowired
+    ProductRepository repositoryProduct;
 
     public List<Orders> getAllOrders() {
-        List<Orders> ordersList = repository.findAll();
+        List<Orders> ordersList = repositoryOrder.findAll();
 
         if (ordersList.size() > 0) {
             return ordersList;
@@ -35,7 +49,7 @@ public class OrdersService {
     }
 
     public Orders getOrdersById(Long id) throws RecordNotFoundException {
-        Optional<Orders> orders = repository.findById(id);
+        Optional<Orders> orders = repositoryOrder.findById(id);
 
         if (orders.isPresent()) {
             return orders.get();
@@ -45,25 +59,83 @@ public class OrdersService {
     }
 
     public Orders createOrders(Orders entity) {
-        entity = repository.save(entity);
+
+        Bill bill = entity.getBill();
+        if (bill != null) {
+            Bill b = repositoryBill.findById(bill.getId()).get();
+            if (b != null) {
+                entity.setBill(b);
+            }
+        }
+
+        Client client = entity.getClient();
+        if (client != null) {
+            Client c = repositoryClient.findById(client.getId()).get();
+            if (c != null) {
+                entity.setClient(c);
+            }
+        }
+
+        Set<Product> products = new HashSet<>();
+        if (entity.getProducts() != null) {
+            for (Product product : entity.getProducts()) {
+                Product p = repositoryProduct.findById(product.getId()).get();
+                if (p == null) {
+                    products.add(product);
+                } else {
+                    products.add(p);
+                }
+            }
+        }
+
+        entity.setProducts(products);
+        entity = repositoryOrder.save(entity);
         return entity;
     }
 
     public Orders updateOrders(Orders entity) throws RecordNotFoundException {
 
         if (entity.getId() != null) {
-            Optional<Orders> orders = repository.findById(entity.getId());
+            Optional<Orders> orders = repositoryOrder.findById(entity.getId());
 
             if (orders.isPresent()) {
                 Orders newEntity = orders.get();
                 //newEntity.setId(entity.getId());
-                newEntity.setClient(entity.getClient());
+                Client client = entity.getClient();
+                if (client != null) {
+                    Client c = repositoryClient.findById(client.getId()).get();
+                    if (c != null) {
+                        client = c;
+                    }
+                    newEntity.setClient(client);
+                }
+
                 newEntity.setStatus(entity.getStatus());
                 newEntity.setCreationDate(entity.getCreationDate());
-                newEntity.setBill(entity.getBill());
-                newEntity.setProducts(entity.getProducts());
 
-                newEntity = repository.save(newEntity);
+                Bill bill = entity.getBill();
+                if (bill != null) {
+                    Bill b = repositoryBill.findById(bill.getId()).get();
+                    if (b != null) {
+                        bill = b;
+                    }
+                    newEntity.setBill(bill);
+                }
+
+                Set<Product> products = new HashSet<>();
+                if (entity.getProducts() != null) {
+                    for (Product product : entity.getProducts()) {
+                        Product p = repositoryProduct.findById(product.getId()).get();
+                        if (p == null) {
+                            products.add(product);
+                        } else {
+                            products.add(p);
+                        }
+                    }
+                }
+                newEntity.setProducts(products);
+
+                newEntity = repositoryOrder.save(newEntity);
 
                 return newEntity;
             } else {
@@ -75,17 +147,17 @@ public class OrdersService {
     }
 
     public void deleteOrdersById(Long id) throws RecordNotFoundException {
-        Optional<Orders> orders = repository.findById(id);
+        Optional<Orders> orders = repositoryOrder.findById(id);
 
         if (orders.isPresent()) {
-            repository.deleteById(id);
+            repositoryOrder.deleteById(id);
         } else {
             throw new RecordNotFoundException("No orders record exist for given id", id);
         }
     }
 
-    public List<Orders> getOrdersByStatus(String status) {
-        List<Orders> ordersList = repository.getByStatus(status);
+    public List<Orders> getClientByCriteria(String date, String status) {
+        List<Orders> ordersList = repositoryOrder.getByCriteria(date,status);
 
         if (ordersList.size() > 0) {
             return ordersList;
@@ -93,5 +165,5 @@ public class OrdersService {
             return new ArrayList<Orders>();
         }
     }
-    
+
 }

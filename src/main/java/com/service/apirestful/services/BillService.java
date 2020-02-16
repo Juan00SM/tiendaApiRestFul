@@ -7,25 +7,27 @@ package com.service.apirestful.services;
 
 import com.service.apirestful.exceptions.RecordNotFoundException;
 import com.service.apirestful.model.Bill;
+import com.service.apirestful.model.Orders;
 import com.service.apirestful.repositories.BillRepository;
+import com.service.apirestful.repositories.OrdersRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author juans
- */
+
 @Service
 public class BillService {
-    
+
     @Autowired
-    BillRepository repository;
+    BillRepository repositoryBill;
+
+    @Autowired
+    OrdersRepository repositoryOrder;
 
     public List<Bill> getAllBill() {
-        List<Bill> billList = repository.findAll();
+        List<Bill> billList = repositoryBill.findAll();
 
         if (billList.size() > 0) {
             return billList;
@@ -35,7 +37,7 @@ public class BillService {
     }
 
     public Bill getBillById(Long id) throws RecordNotFoundException {
-        Optional<Bill> bill = repository.findById(id);
+        Optional<Bill> bill = repositoryBill.findById(id);
 
         if (bill.isPresent()) {
             return bill.get();
@@ -45,14 +47,21 @@ public class BillService {
     }
 
     public Bill createBill(Bill entity) {
-        entity = repository.save(entity);
+        Orders o = entity.getOrders();
+        if (o != null) {
+            Orders or = repositoryOrder.findById(o.getId()).get();
+            if (or != null) {
+                entity.setOrders(or);
+            }
+        }
+        entity = repositoryBill.save(entity);
         return entity;
     }
 
     public Bill updateBill(Bill entity) throws RecordNotFoundException {
 
         if (entity.getId() != null) {
-            Optional<Bill> bill = repository.findById(entity.getId());
+            Optional<Bill> bill = repositoryBill.findById(entity.getId());
 
             if (bill.isPresent()) {
                 Bill newEntity = bill.get();
@@ -60,10 +69,19 @@ public class BillService {
                 newEntity.setDatePurchase(entity.getDatePurchase());
                 newEntity.setNumProduct(entity.getNumProduct());
                 newEntity.setTotalPrice(entity.getTotalPrice());
-                newEntity.setOrders(entity.getOrders());
                 newEntity.setCode(entity.getCode());
 
-                newEntity = repository.save(newEntity);
+                Orders o = entity.getOrders();
+                if (o != null) {
+                    Orders or = repositoryOrder.findById(o.getId()).get();
+                    if (or != null) {
+                        o = or;
+                    }
+                    newEntity.setOrders(o);
+                }
+                
+
+                newEntity = repositoryBill.save(newEntity);
 
                 return newEntity;
             } else {
@@ -75,17 +93,17 @@ public class BillService {
     }
 
     public void deleteBillById(Long id) throws RecordNotFoundException {
-        Optional<Bill> bill = repository.findById(id);
+        Optional<Bill> bill = repositoryBill.findById(id);
 
         if (bill.isPresent()) {
-            repository.deleteById(id);
+            repositoryBill.deleteById(id);
         } else {
             throw new RecordNotFoundException("No bill record exist for given id", id);
         }
     }
 
     public List<Bill> getBillByCode(String code) {
-        List<Bill> billList = repository.getByCode(code);
+        List<Bill> billList = repositoryBill.getByCode(code);
 
         if (billList.size() > 0) {
             return billList;
@@ -93,34 +111,35 @@ public class BillService {
             return new ArrayList<Bill>();
         }
     }
-       public List<Bill> getByLessTotalPrices(String max){
-        List<Bill> billList = repository.getLessTotalPrice(max);
-     
+
+    public List<Bill> getByLessTotalPrices(String max) {
+        List<Bill> billList = repositoryBill.getLessTotalPrice(max);
+
         if (billList.size() > 0) {
             return billList;
         } else {
             return new ArrayList<Bill>();
         }
     }
-    
-    public List<Bill> getByMoreTotalPrice(String min){
-        List<Bill> billList = repository.getMoreTotalPrice(min);
-     
+
+    public List<Bill> getByMoreTotalPrice(String min) {
+        List<Bill> billList = repositoryBill.getMoreTotalPrice(min);
+
         if (billList.size() > 0) {
             return billList;
         } else {
             return new ArrayList<Bill>();
         }
     }
-    
-    public List<Bill> getBetweenTotalPrices(String max,String min){
-        List<Bill> billList = repository.getPriceTotalBetween(max,min);
-     
+
+    public List<Bill> getBetweenTotalPrices(String max, String min) {
+        List<Bill> billList = repositoryBill.getPriceTotalBetween(max, min);
+
         if (billList.size() > 0) {
             return billList;
         } else {
             return new ArrayList<Bill>();
         }
     }
-    
+
 }

@@ -18,13 +18,10 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author juans
- */
+
 @Service
 public class ProductService {
-    
+
     @Autowired
     ProductRepository repositoryProduct;
     @Autowired
@@ -51,17 +48,19 @@ public class ProductService {
     }
 
     public Product createProduct(Product entity) {
-        Set<Orders> orders=new HashSet<>();
+        Set<Orders> orders = new HashSet<>();
         Orders o;
-        
-        for (Orders order : entity.getOrders()) {
-            o= repositoryOrder.findById(order.getId()).get();
-            if(o==null){
-                orders.add(order);
-            }else{
-                orders.add(o);
+        if (entity.getOrders() != null) {
+            for (Orders order : entity.getOrders()) {
+                o = repositoryOrder.findById(order.getId()).get();
+                if (o == null) {
+                    orders.add(order);
+                } else {
+                    orders.add(o);
+                }
             }
         }
+
         entity.setOrders(orders);
         entity = repositoryProduct.save(entity);
         return entity;
@@ -78,7 +77,19 @@ public class ProductService {
                 newEntity.setName(entity.getName());
                 newEntity.setDescription(entity.getDescription());
                 newEntity.setPrice(entity.getPrice());
-                newEntity.setOrders(entity.getOrders());
+
+                Set<Orders> orders = new HashSet<>();
+                if (entity.getOrders() != null) {
+                    for (Orders order : entity.getOrders()) {
+                        Orders o = repositoryOrder.findById(order.getId()).get();
+                        if (o == null) {
+                            orders.add(order);
+                        } else {
+                            orders.add(o);
+                        }
+                    }
+                }
+                newEntity.setOrders(orders);
 
                 newEntity = repositoryProduct.save(newEntity);
 
@@ -110,75 +121,81 @@ public class ProductService {
             return new ArrayList<Product>();
         }
     }
+
     //Extrae los productos que coincidan con un nombre dado y que se encuentren en un margen de precios deseado
-    public List<Product> getByNamePrices(String name,String max, String min){
-        List<Product> ProductList = repositoryProduct.getByNamePrices(name,max,min);
-    
+    public List<Product> getByNamePrices(String name, String max, String min) {
+        List<Product> ProductList = repositoryProduct.getByNamePrices(name, max, min);
+
         if (ProductList.size() > 0) {
             return ProductList;
         } else {
             return new ArrayList<Product>();
         }
     }
+
     //Extrae lo productos de un precio menor al dado
-    public List<Product> getByLessPrices(String max){
+    public List<Product> getByLessPrices(String max) {
         List<Product> ProductList = repositoryProduct.getLessPrice(max);
-     
+
         if (ProductList.size() > 0) {
             return ProductList;
         } else {
             return new ArrayList<Product>();
         }
     }
+
     //Extra productos de un precio mayor al dado
-    public List<Product> getByMorePrice(String min){
+    public List<Product> getByMorePrice(String min) {
         List<Product> ProductList = repositoryProduct.getMorePrice(min);
-     
+
         if (ProductList.size() > 0) {
             return ProductList;
         } else {
             return new ArrayList<Product>();
         }
     }
+
     //Extrae productos de un precio entre un valor maximo y uno minimo
-    public List<Product> getBetweenPrices(String max,String min){
-        List<Product> ProductList = repositoryProduct.getPriceBetween(max,min);
-     
+    public List<Product> getBetweenPrices(String max, String min) {
+        List<Product> ProductList = repositoryProduct.getPriceBetween(max, min);
+
         if (ProductList.size() > 0) {
             return ProductList;
         } else {
             return new ArrayList<Product>();
         }
     }
+
     //Devuleve lo productos que coincidan con un nombre dado y que tengan un precio mayor al dado
-    public List<Product> getByNameMinPrice(String name,String min){
-        List<Product> ProductList = repositoryProduct.getByNameMinPrice(name,min);
-     
+    public List<Product> getByNameMinPrice(String name, String min) {
+        List<Product> ProductList = repositoryProduct.getByNameMinPrice(name, min);
+
         if (ProductList.size() > 0) {
             return ProductList;
         } else {
             return new ArrayList<Product>();
         }
     }
-     //Devuleve lo productos que coincidan con un nombre dado y que tengan un precio menor al dado
-    public List<Product> getByNameMaxPrice(String name,String max){
-        List<Product> ProductList = repositoryProduct.getByNameMaxPrice(name,max);
-     
+    //Devuleve lo productos que coincidan con un nombre dado y que tengan un precio menor al dado
+
+    public List<Product> getByNameMaxPrice(String name, String max) {
+        List<Product> ProductList = repositoryProduct.getByNameMaxPrice(name, max);
+
         if (ProductList.size() > 0) {
             return ProductList;
         } else {
             return new ArrayList<Product>();
         }
     }
-    
-    public List<Product> getByOrder(Long id){
+
+    public List<Product> getByOrder(Long id) {
         List<Product> ProductList = repositoryProduct.getByOrder(id);
-     
+
         if (ProductList.size() > 0) {
             return ProductList;
         } else {
             return new ArrayList<Product>();
         }
     }
-    
+
 }

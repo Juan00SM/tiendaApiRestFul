@@ -10,10 +10,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-/**
- *
- * @author juans
- */
+
 public interface ProductRepository extends JpaRepository<Product, Long>{
     
     @Query(
@@ -56,4 +53,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
             + " op.id_product=p.id and op.id_product= ?1",
             nativeQuery=true)
     public List<Product> getByOrder(Long id_order);
+    
 }

@@ -5,12 +5,17 @@
  */
 package com.service.apirestful.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,10 +28,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- *
- * @author juans
- */
 @Entity
 @Table(name = "orders")
 public class Orders implements Serializable{
@@ -45,16 +46,15 @@ public class Orders implements Serializable{
     @Column(name = "status")
     private String status;
     
-    @OneToOne
-    @JoinColumn(name = "id_bill", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "orders", fetch = FetchType.LAZY)
     private Bill bill;
     
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client", referencedColumnName = "id")
     private Client client;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "orders_product", 
         joinColumns = @JoinColumn(name = "id_orders",referencedColumnName = "id"), 

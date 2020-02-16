@@ -21,12 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author juans
- */
 @RestController
 @RequestMapping("/orders")
 public class OrdersServiceController {
@@ -48,10 +45,11 @@ public class OrdersServiceController {
 
         return new ResponseEntity<Orders>(entity, new HttpHeaders(), HttpStatus.OK);
     }
-
-    @GetMapping("/search/{status}")
-    public ResponseEntity<List<Orders>> getOrdersByStatus(@PathVariable("status") String status) {
-        List<Orders> list = service.getOrdersByStatus(status);
+    
+    @GetMapping("/search")
+    public ResponseEntity<List<Orders>> getClientByCriteria(@RequestParam(required = false,name="date") String date,@RequestParam(required = false,name="status") String status) {
+       
+        List<Orders> list = service.getClientByCriteria(date==null?"":date,status==null?"":status);
 
         return new ResponseEntity<List<Orders>>(list, new HttpHeaders(), HttpStatus.OK);
     }

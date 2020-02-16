@@ -1,27 +1,27 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package com.service.apirestful.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- *
- * @author juans
- */
 @Entity
 @Table(name = "bill")
 public class Bill implements Serializable {
@@ -46,7 +46,8 @@ public class Bill implements Serializable {
     @Column(name = "totalPrice")
     private int totalPrice;
 
-    @OneToOne(mappedBy = "bill")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_orders", referencedColumnName = "id")
     private Orders orders;
 
     public Bill() {

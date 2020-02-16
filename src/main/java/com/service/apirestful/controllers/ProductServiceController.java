@@ -6,7 +6,6 @@
 package com.service.apirestful.controllers;
 
 import com.service.apirestful.exceptions.RecordNotFoundException;
-import com.service.apirestful.model.Client;
 import com.service.apirestful.model.Product;
 import com.service.apirestful.services.ProductService;
 import java.util.ArrayList;
@@ -26,17 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author juans
- */
 @RestController
 @RequestMapping("/product")
 public class ProductServiceController {
 
     @Autowired
     ProductService service;
-    
+
     @GetMapping
     public ResponseEntity<List<Product>> getAllProduct() {
         List<Product> list = service.getAllProduct();
@@ -51,48 +46,48 @@ public class ProductServiceController {
 
         return new ResponseEntity<Product>(entity, new HttpHeaders(), HttpStatus.OK);
     }
+    
     //Permite extraer todos los productos que pertenezcan a un pedido concreto
     @GetMapping("/byOrder")
-    public ResponseEntity<List<Product>> getProductByOrder(@RequestParam(required = true,name="id") Long id)
+    public ResponseEntity<List<Product>> getProductByOrder(@RequestParam(required = true, name = "id") Long id)
             throws RecordNotFoundException {
-        List<Product> list= service.getByOrder(id);
+        List<Product> list = service.getByOrder(id);
 
         return new ResponseEntity<List<Product>>(list, new HttpHeaders(), HttpStatus.OK);
     }
-    
+
     /*
     Permit la busqueda de productos segun nombre y precio, para ello utiliza if encadenados,
     comprovando si los parametros le han sido pasados o son nulos y por tanto no busca por ellos
-    */
+     */
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> getProductByCriteria(@RequestParam(required = false,name="name") String name,@RequestParam(required = false,name="max") String max,@RequestParam(required = false,name="min") String min) {
-        List<Product> list=null;
-        if(name==null&&max==null&&min==null){
-            list=new ArrayList<>();
-        }else{
-            if(max==null){
-                if(name==null){
-                    list=service.getByMorePrice(min);
-                }else{
-                    if(min==null){
-                        list=service.getByName(name);
-                    }
-                    else{
-                        list=service.getByNameMinPrice(name, min);
+    public ResponseEntity<List<Product>> getProductByCriteria(@RequestParam(required = false, name = "name") String name, @RequestParam(required = false, name = "max") String max, @RequestParam(required = false, name = "min") String min) {
+        List<Product> list = null;
+        if (name == null && max == null && min == null) {
+            list = new ArrayList<>();
+        } else {
+            if (max == null) {
+                if (name == null) {
+                    list = service.getByMorePrice(min);
+                } else {
+                    if (min == null) {
+                        list = service.getByName(name);
+                    } else {
+                        list = service.getByNameMinPrice(name, min);
                     }
                 }
-            }else{
-                if(name==null){
-                    if(min==null){
-                        list=service.getByLessPrices(max);
-                    }else{
-                        list=service.getBetweenPrices(max, min);
+            } else {
+                if (name == null) {
+                    if (min == null) {
+                        list = service.getByLessPrices(max);
+                    } else {
+                        list = service.getBetweenPrices(max, min);
                     }
-                }else{
-                    if(min==null){
-                        list=service.getByNameMaxPrice(name,max);
-                    }else{
-                        list=service.getByNamePrices(name, max, min);
+                } else {
+                    if (min == null) {
+                        list = service.getByNameMaxPrice(name, max);
+                    } else {
+                        list = service.getByNamePrices(name, max, min);
                     }
                 }
             }
