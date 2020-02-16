@@ -110,7 +110,7 @@ public class ProductService {
             return new ArrayList<Product>();
         }
     }
-    
+    //Extrae los productos que coincidan con un nombre dado y que se encuentren en un margen de precios deseado
     public List<Product> getByNamePrices(String name,String max, String min){
         List<Product> ProductList = repositoryProduct.getByNamePrices(name,max,min);
     
@@ -120,7 +120,7 @@ public class ProductService {
             return new ArrayList<Product>();
         }
     }
-    
+    //Extrae lo productos de un precio menor al dado
     public List<Product> getByLessPrices(String max){
         List<Product> ProductList = repositoryProduct.getLessPrice(max);
      
@@ -130,7 +130,7 @@ public class ProductService {
             return new ArrayList<Product>();
         }
     }
-    
+    //Extra productos de un precio mayor al dado
     public List<Product> getByMorePrice(String min){
         List<Product> ProductList = repositoryProduct.getMorePrice(min);
      
@@ -140,7 +140,7 @@ public class ProductService {
             return new ArrayList<Product>();
         }
     }
-    
+    //Extrae productos de un precio entre un valor maximo y uno minimo
     public List<Product> getBetweenPrices(String max,String min){
         List<Product> ProductList = repositoryProduct.getPriceBetween(max,min);
      
@@ -150,7 +150,7 @@ public class ProductService {
             return new ArrayList<Product>();
         }
     }
-    
+    //Devuleve lo productos que coincidan con un nombre dado y que tengan un precio mayor al dado
     public List<Product> getByNameMinPrice(String name,String min){
         List<Product> ProductList = repositoryProduct.getByNameMinPrice(name,min);
      
@@ -160,7 +160,7 @@ public class ProductService {
             return new ArrayList<Product>();
         }
     }
-    
+     //Devuleve lo productos que coincidan con un nombre dado y que tengan un precio menor al dado
     public List<Product> getByNameMaxPrice(String name,String max){
         List<Product> ProductList = repositoryProduct.getByNameMaxPrice(name,max);
      
@@ -171,5 +171,14 @@ public class ProductService {
         }
     }
     
+    public List<Product> getByOrder(Long id){
+        List<Product> ProductList = repositoryProduct.getByOrder(id);
+     
+        if (ProductList.size() > 0) {
+            return ProductList;
+        } else {
+            return new ArrayList<Product>();
+        }
+    }
     
 }

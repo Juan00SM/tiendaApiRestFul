@@ -36,7 +36,7 @@ public class ProductServiceController {
 
     @Autowired
     ProductService service;
-
+    
     @GetMapping
     public ResponseEntity<List<Product>> getAllProduct() {
         List<Product> list = service.getAllProduct();
@@ -51,7 +51,19 @@ public class ProductServiceController {
 
         return new ResponseEntity<Product>(entity, new HttpHeaders(), HttpStatus.OK);
     }
+    //Permite extraer todos los productos que pertenezcan a un pedido concreto
+    @GetMapping("/byOrder")
+    public ResponseEntity<List<Product>> getProductByOrder(@RequestParam(required = true,name="id") Long id)
+            throws RecordNotFoundException {
+        List<Product> list= service.getByOrder(id);
 
+        return new ResponseEntity<List<Product>>(list, new HttpHeaders(), HttpStatus.OK);
+    }
+    
+    /*
+    Permit la busqueda de productos segun nombre y precio, para ello utiliza if encadenados,
+    comprovando si los parametros le han sido pasados o son nulos y por tanto no busca por ellos
+    */
     @GetMapping("/search")
     public ResponseEntity<List<Product>> getProductByCriteria(@RequestParam(required = false,name="name") String name,@RequestParam(required = false,name="max") String max,@RequestParam(required = false,name="min") String min) {
         List<Product> list=null;
